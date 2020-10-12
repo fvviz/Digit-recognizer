@@ -9,11 +9,18 @@ from machine_learning.get_utils import Digit
 
 class Recognizer:
 
-    def __init__(self,data_path = "../data/mnist.csv"):
+    def __init__(self,dataset_type = "sklearn"):
 
         self.model = None
         self.digit = Digit()
-        self.data = pd.read_csv(data_path)
+
+
+        if dataset_type == "kaggle":
+            self.data = pd.read_csv("../data/kaggle_mnist.csv")
+
+        elif dataset_type == "sklearn":
+            self.data = pd.read_csv("../data/mnist.csv")
+
 
     def load_model(self,model_name):
         self.model = joblib.load(f"../models/{model_name}")

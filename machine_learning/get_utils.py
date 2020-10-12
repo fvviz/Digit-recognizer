@@ -5,7 +5,7 @@ import pandas as pd
 import random
 import matplotlib.pyplot as plt
 
-from PIL import Image
+from PIL import Image, ImageOps
 from skimage.io import imread
 
 class Digit:
@@ -21,11 +21,11 @@ class Digit:
     def load_from_canvas(self,path= "../predictions/CANVAS_DIGIT.png"):
 
         image = Image.open(path)
-        resized_image = image.resize(self.size)
+        resized_image =ImageOps.invert(image.resize(self.size))
         resized_image.save(self.save_path)
 
         self.pixel_matrix =imread(self.save_path,as_gray=True)
-        #plt.imshow(255-self.pixel_matrix,cmap = "gray")
+        #plt.imshow(self.pixel_matrix,cmap = "gray")
         #plt.show()
         self.vector_transpose = self.pixel_matrix.reshape(1,784)
 

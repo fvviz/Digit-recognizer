@@ -1,4 +1,4 @@
-from tkinter import Tk, Canvas, Button
+from tkinter import *
 from tkinter import messagebox
 from PIL import ImageGrab
 import os
@@ -15,36 +15,45 @@ from machine_learning.get_utils import Digit
 
 class GUI:
 
-    def __init__(self):
+    def __init__(self,dim = 200):
+
+        dim_dict = {
+            100: 87.4999999998,
+            28: 24.4999999999,
+            200: 196.078431373,
+            500: 496.031746032,
+        }
+
         self.window=  Tk()
+        self.dim = dim
         self.window.configure(bg="gray")
         self.window.title("Digit recognizer")
         self.window.rowconfigure(0, weight=1)
         self.window.columnconfigure(0, weight=1)
-        #self.window.state('windowed')
+        self.window.geometry(f'500x{dim+40}')
+
+
 
         self.current_x = 0
         self.current_y = 0
 
-        self.canvas = Canvas(self.window,height=296.05263158,width=296.05263158,bg = "white")
-        self.predict_button = Button(self.window,text= "Predict",command = self.button_click,height = 2,width = 20)
-        self.clear_button = Button(self.window, text="Clear", command=self.clear_screen, height=2, width=20)
+        self.canvas = Canvas(self.window,height=dim_dict[dim],width=dim_dict[dim],bg = "white")
+        self.img_canvas = Canvas(self.window,height = 24.4999999999,width = 24.4999999999)
+        self.predict_button = Button(self.window,text= "Predict",command = self.button_click,height = 2,width = 10)
+        self.clear_button = Button(self.window, text="Clear", command=self.clear_screen, height=2, width=10)
         self.recognizer = Recognizer()
         self.message_window = messagebox
+        self.prediction_label = Label(self.window,text = "Draw and click predict",width = 20,height = 1)
+        self.scale_label_frame = LabelFrame(self.window,text= "Brush size",bd = 5, font = ('arial',7,'bold'), relief = RIDGE)
+        self.scale_bar = Scale(self.scale_label_frame,orient = VERTICAL,from_  = 10, to = 60,length = 100)
+        self.scale_bar.set(1)
 
-        fig = Figure(figsize=(5, 5), dpi=100)
-        self.ax = fig.add_subplot(111)
-        self.mt_canvas = FigureCanvasTkAgg(fig, master=self.window)
-        self.mt_canvas.get_tk_widget().grid()
-        self.mt_canvas.draw()
-
-        toolbar = NavigationToolbar2Tk(self.mt_canvas,self.window)
-        toolbar.update()
-
-        self.canvas.grid(row=0, column=0)
-        self.predict_button.grid(row=0, column=1)
-        self.clear_button.grid(row=1,column = 1)
-        self.mt_canvas.get_tk_widget().grid(row=0)
+        self.canvas.place(x=130,y = 0)
+        self.prediction_label.place(x=130, y= 200)
+        self.predict_button.place(x=0, y=50)
+        self.clear_button.place(x=0, y=4)
+        self.scale_label_frame.place(x = 0,y =100,height = 150,width = 60)
+        self.scale_bar.place(x = 0, y = 20)
         self.recognizer.load_model("forest_clf.sav")
 
 
@@ -56,7 +65,7 @@ class GUI:
 
     def draw(self,event):
 
-        self.canvas.create_line((self.current_x, self.current_y, event.x, event.y),width = 40)
+        self.canvas.create_rectangle((self.current_x, self.current_y, event.x, event.y),fill = "black",width = self.scale_bar.get())
         self.current_x = event.x
         self.current_y = event.y
 
@@ -69,11 +78,12 @@ class GUI:
 
         self.digit = Digit()
         self.digit.load_from_canvas()
+        digit_image = PhotoImage(file = self.digit.save_path)
         prediction = self.recognizer.recognize(self.digit)
-        self.ax.imshow(self.digit.pixel_matrix)
 
 
-        self.message_window.showinfo("Prediction", f"The digit you drew is {prediction}")
+        self.img_canvas.create_image(100,100,image = digit_image,anchor = NW)
+        self.prediction_label.configure(text = f"Prediction : {prediction}")
 
     def clear_screen(self):
 
