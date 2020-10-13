@@ -2,32 +2,9 @@ from sklearn.datasets import fetch_openml
 
 import numpy as np
 import pandas as pd
-import random
+
 import matplotlib.pyplot as plt
 
-from PIL import Image, ImageOps
-from skimage.io import imread
-
-class Digit:
-
-    def __init__(self):
-       self.id =int(random.randint(1000,9000))
-       self.save_path = f"../predictions/img_1.png"
-
-       self.pixel_matrix= np.zeros((28,28))
-       self.vector_transpose = np.zeros((1,784))
-       self.size = (28,28)
-
-    def load_from_canvas(self,path= "../predictions/CANVAS_DIGIT.png"):
-
-        image = Image.open(path)
-        resized_image =ImageOps.invert(image.resize(self.size))
-        resized_image.save(self.save_path)
-
-        self.pixel_matrix =imread(self.save_path,as_gray=True)
-        #plt.imshow(self.pixel_matrix,cmap = "gray")
-        #plt.show()
-        self.vector_transpose = self.pixel_matrix.reshape(1,784)
 
 
 

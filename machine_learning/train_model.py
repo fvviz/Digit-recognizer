@@ -25,6 +25,6 @@ def visualize_data( X, y, type="random", amount=5):
 #data = pd.read_csv("../data/mnist.csv")
 #visualize_data(X = data.drop(["class"], axis = 1).to_numpy(), y = data["class"].values,amount=10)
 
-app = GUI(dim=200)
+app = GUI(dim=200,model="logreg_model.sav")
 app.init()
 

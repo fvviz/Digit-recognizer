@@ -1,10 +1,35 @@
 import joblib
 import pandas as pd
+import numpy as np
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
 
-from machine_learning.get_utils import Digit
+import random
+from PIL import Image, ImageOps
+from skimage.io import imread
+
+class Digit:
+
+    def __init__(self):
+       self.id =int(random.randint(1000,9000))
+       self.save_path = f"predictions/img_1.png"
+
+       self.pixel_matrix= np.zeros((28,28))
+       self.vector_transpose = np.zeros((1,784))
+       self.size = (28,28)
+
+    def load_from_canvas(self,path= "predictions/CANVAS_DIGIT.png",save_path = None):
+
+        if not save_path:
+            save_path = self.save_path
+
+        image = Image.open(path)
+        resized_image =ImageOps.invert(image.resize(self.size))
+        resized_image.save(save_path)
+
+        self.pixel_matrix =imread(save_path,as_gray=True)
+        self.vector_transpose = self.pixel_matrix.reshape(1,784)
 
 
 class Recognizer:
@@ -16,14 +41,14 @@ class Recognizer:
 
 
         if dataset_type == "kaggle":
-            self.data = pd.read_csv("../data/kaggle_mnist.csv")
+            self.data = pd.read_csv("data/kaggle_mnist.csv")
 
         elif dataset_type == "sklearn":
-            self.data = pd.read_csv("../data/mnist.csv")
+            self.data = pd.read_csv("data/mnist.csv")
 
 
     def load_model(self,model_name):
-        self.model = joblib.load(f"../models/{model_name}")
+        self.model = joblib.load(f"models/{model_name}")
 
     def train_new_model(self,model_name,estimator = "random_forest"):
             data = self.data.copy()
@@ -59,7 +84,9 @@ class Recognizer:
         digit_vector = digit.vector_transpose
 
         if self.model:
-            return self.model.predict(digit_vector)[0]
+            prediction  = self.model.predict(digit_vector)[0]
+            pred_stats= self.model.decision_function(digit_vector)[0]
+            return prediction,pred_stats
         else:
             raise Exception("No model available")
 
