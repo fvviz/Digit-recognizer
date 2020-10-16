@@ -4,6 +4,7 @@ import numpy as np
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
+from tensorflow import keras
 
 import random
 from PIL import Image, ImageOps
@@ -37,6 +38,7 @@ class Recognizer:
     def __init__(self,dataset_type = "sklearn"):
 
         self.model = None
+        self.model_type = None
         self.digit = Digit()
 
 
@@ -48,7 +50,13 @@ class Recognizer:
 
 
     def load_model(self,model_name):
-        self.model = joblib.load(f"models/{model_name}")
+        if str(model_name).endswith(".sav"):
+             self.model = joblib.load(f"models/{model_name}")
+             self.model_type = "sklearn_ml"
+
+        elif str(model_name).endswith(".model"):
+             self.model = keras.models.load_model(f"models/{model_name}")
+             self.model_type = "neural_net"
 
     def train_new_model(self,model_name,estimator = "random_forest"):
             data = self.data.copy()
@@ -83,10 +91,19 @@ class Recognizer:
 
         digit_vector = digit.vector_transpose
 
-        if self.model:
+        if self.model and self.model_type == "sklearn_ml":
             prediction  = self.model.predict(digit_vector)[0]
             pred_stats= self.model.decision_function(digit_vector)[0]
             return prediction,pred_stats
+
+        if self.model and self.model_type == "neural_net":
+
+            normalized_digit  = keras.utils.normalize(digit.pixel_matrix.reshape((1,28,28)))
+            prediction_array = self.model.predict(normalized_digit)
+            prediction = np.argmax(prediction_array)
+            pred_stats = prediction_array.copy()
+            return prediction, pred_stats
+
         else:
             raise Exception("No model available")
 

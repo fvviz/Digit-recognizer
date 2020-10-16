@@ -57,21 +57,30 @@ class PredictionStats:
         self.nine_bar.place(x=7, y=-2)
 
     def show_stats(self,stat_list):
+        try:
 
-         for bar in self.pred_bars:
-
+           for bar in self.pred_bars:
              amount = stat_list[self.pred_bars.index(bar)]
              bar['value'] = amount*1000
              self.window.update()
+        except:
 
-             #bar.step(amount = stat_list[self.pred_bars.index(bar)]*100)
+            for bar in self.pred_bars:
+                amount = stat_list[0][self.pred_bars.index(bar)]
+                bar['value'] = amount * 1000
+                self.window.update()
+
+
 
     def clear_bars(self):
 
         for bar in self.pred_bars:
-
             bar['value'] = 1
             self.window.update()
+
+
+
+
 
 
 

@@ -68,7 +68,7 @@ class GUI:
             y = self.window.winfo_rooty() + self.canvas.winfo_y()
             x1 = x + self.canvas.winfo_width()
             y1 = y + self.canvas.winfo_height()
-            ImageGrab.grab().crop((x, y, x1, y1)).save("../predictions/CANVAS_DIGIT_2.png")
+            ImageGrab.grab().crop((x, y, x1, y1)).save("predictions/CANVAS_DIGIT_2.png")
 
             self.digit = Digit()
             self.digit.load_from_canvas(path="predictions/CANVAS_DIGIT_2.png",
@@ -85,7 +85,9 @@ class GUI:
             except:
                 pass
 
-            sleep(0.01)
+            sleep(0.30)
+
+
     def predict_digit(self):
         x = self.window.winfo_rootx() + self.canvas.winfo_x()
         y = self.window.winfo_rooty() + self.canvas.winfo_y()
@@ -165,7 +167,35 @@ class GUI:
 
         self.canvas.bind("<Button-1>", self.click)
         self.canvas.bind("<B1-Motion>", self.draw)
+
+        while True:
+            x = self.window.winfo_rootx() + self.canvas.winfo_x()
+            y = self.window.winfo_rooty() + self.canvas.winfo_y()
+            x1 = x + self.canvas.winfo_width()
+            y1 = y + self.canvas.winfo_height()
+            ImageGrab.grab().crop((x, y, x1, y1)).save("predictions/screen_cap.png")
+
+            self.digit = Digit()
+            self.digit.load_from_canvas(path="predictions/CANVAS_DIGIT_2.png",
+                                        save_path="predictions/screen_cap.png")
+            prediction, bars = self.recognizer.recognize(self.digit)
+            self.prediction_bars.show_stats(bars)
+
+            try:
+                os.remove("predictions/screen_cap.png")
+            except:
+                pass
+            try:
+                os.remove("predictions/screen_cap.png")
+            except:
+                pass
+
+            sleep(0.20)
+
+
         self.window.mainloop()
+
+
 
 
 
