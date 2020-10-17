@@ -41,14 +41,6 @@ class Recognizer:
         self.model_type = None
         self.digit = Digit()
 
-
-        if dataset_type == "kaggle":
-            self.data = pd.read_csv("data/kaggle_mnist.csv")
-
-        elif dataset_type == "sklearn":
-            self.data = pd.read_csv("data/mnist.csv")
-
-
     def load_model(self,model_name):
         if str(model_name).endswith(".sav"):
              self.model = joblib.load(f"models/{model_name}")
