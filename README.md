@@ -64,5 +64,28 @@ cd machine-learning
 python visualize_data.py
 ```
 
+# Errors
 
+**Launching errors**
 
+If you are getting an error that looks like this
+```python
+ImportError: Could not find the DLL(s) 'msvcp140_1.dll'. TensorFlow requires that these DLLs be installed in a directory that is named in your %PATH% environment variable. You may install these DLLs by downloading "Microsoft C++ Redistributable for Visual Studio 2015, 2017 and 2019" 
+for your platform from this URL: https://support.microsoft.com/help/2977003/the-latest-supported-visual-c-downloads
+```
+
+Do exactly what it says and install visual studio from here https://support.microsoft.com/help/2977003/the-latest-supported-visual-c-downloads
+
+**Model prediction errors**
+
+The model is fairly accurate (97.7% accuracy on test set) and will not probably not make any big mistake in prediction unless you dont draw properly
+
+However be very careful when you draw a 4. This model is a little probablematic with 4s and will not predict them properly if you a draw a 4 a little too big. While drawing 4s make sure you draw them a little smaller than usual
+
+As i said before ill improve this model asap
+
+**Other unknown errors**
+
+if you are getting any other unknown error, You can **Add it to issues or contact me on discord: fwiz#3435**
+
+You can also join this [discord server](https://discord.gg/sYUeN8) for immediate help 
