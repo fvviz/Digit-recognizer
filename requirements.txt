@@ -1,8 +1,10 @@
 numpy
 pandas
 Pillow
+matplotlib
 scikit-image
 scikit-learn
 sklearn
 tensorflow
+
 
