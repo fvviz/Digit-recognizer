@@ -29,6 +29,7 @@ class GUI:
         self.window.rowconfigure(0, weight=1)
         self.window.columnconfigure(0, weight=1)
         self.window.geometry(f'600x500')
+        self.window.iconphoto("app/app_icon.png")
 
         self.current_x = 0
         self.current_y = 0
