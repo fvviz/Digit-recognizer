@@ -1,6 +1,10 @@
 # Digit-recognizer
 ![Python-Versions](https://img.shields.io/badge/python-3.7-blue?style=flat-square)
 
+<p align="center">
+    <img src="https://images-ext-1.discordapp.net/external/xvm-aeyKLdfbGsKp4KRyxw8EWxaRfw18wtNo7BRbtKA/https/repository-images.githubusercontent.com/302834349/907f3680-10a0-11eb-8409-06e924112f05?width=532&height=468">
+</p>
+
 A tkinter based GUI Machine learning/Deep learning app that lets you draw digits and then predicts them.
 
 Note : This is my first time building neural nets hence the neural net was trained mostly on default parameters, Once im decent at deep learning ill work more on the neural net in the backend.
