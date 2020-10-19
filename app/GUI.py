@@ -139,3 +139,4 @@ class GUI(Tk):
     def init(self):
         self.canvas.bind("<Button-1>", self.click)
         self.canvas.bind("<B1-Motion>", self.draw)
+        self.mainloop()
